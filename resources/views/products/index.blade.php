@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Categories') }}
+            {{ __('Products') }}
         </h2>
     </x-slot>
 
@@ -29,7 +29,7 @@
                         class="relative inline-grid items-center justify-center w-full h-10 grid-cols-2 p-1 text-gray-500 bg-gray-100 rounded-lg select-none">
                         <button :id="$id(tabId)" @click="tabButtonClicked($el);" type="button"
                             class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">
-                            List Categories
+                            List Products
                         </button>
                         <button :id="$id(tabId)" @click="tabButtonClicked($el);" type="button"
                             class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">
@@ -51,33 +51,51 @@
                                                         <th class="px-5 py-3 text-xs font-medium text-left uppercase">
                                                             Name
                                                         </th>
+                                                        <th class="px-5 py-3 text-xs font-medium text-left uppercase">
+                                                            Description
+                                                        </th>
+                                                        <th class="px-5 py-3 text-xs font-medium text-left uppercase">
+                                                            Price
+                                                        </th>
+                                                        <th class="px-5 py-3 text-xs font-medium text-left uppercase">
+                                                            Category
+                                                        </th>
                                                         <th class="px-5 py-3 text-xs font-medium text-right uppercase">
                                                             Action
                                                         </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="divide-y divide-neutral-200">
-                                                    @if ($categories->isEmpty())
+                                                    @if ($products->isEmpty())
                                                         <tr class="text-neutral-800">
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap"
-                                                                colspan="2">No data available! Try to add new one.
+                                                                colspan="5">No data available! Try to add new one.
                                                             </td>
                                                         </tr>
                                                     @endif
-                                                    @foreach ($categories as $category)
+                                                    @foreach ($products as $product)
                                                         <tr class="text-neutral-800">
                                                             <td class="px-5 py-4 text-sm font-medium whitespace-nowrap">
-                                                                {{ $category->name }}
+                                                                {{ $product->name }}
+                                                            </td>
+                                                            <td class="px-5 py-4 text-sm font-medium whitespace-nowrap">
+                                                                {{ $product->description }}
+                                                            </td>
+                                                            <td class="px-5 py-4 text-sm font-medium whitespace-nowrap">
+                                                                {{ $product->price }}
+                                                            </td>
+                                                            <td class="px-5 py-4 text-sm font-medium whitespace-nowrap">
+                                                                {{ $product->category->name }}
                                                             </td>
                                                             <td
                                                                 class="flex items-center justify-end gap-2 px-5 py-4 text-sm font-medium text-right whitespace-nowrap">
                                                                 <form
-                                                                    action="{{ route('categories.destroy', $category->id) }}"
+                                                                    action="{{ route('products.destroy', $product->id) }}"
                                                                     method="POST">
                                                                     @method('DELETE')
                                                                     @csrf
                                                                     <a class="text-blue-600 hover:text-blue-700"
-                                                                        href="{{ route('categories.show', $category->id) }}">
+                                                                        href="{{ route('products.show', $product->id) }}">
                                                                         Edit
                                                                     </a>
                                                                     <button type="submit"
@@ -98,14 +116,14 @@
 
                         <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative" x-cloak>
                             <form class="border rounded-lg shadow-sm bg-card text-neutral-900" method="POST"
-                                action="{{ route('categories.store') }}">
+                                action="{{ route('products.store') }}">
                                 @csrf
                                 <div class="flex flex-col space-y-1.5 p-6">
                                     <h3 class="text-lg font-semibold leading-none tracking-tight">
-                                        Add New Data of Category
+                                        Add New Data of Product
                                     </h3>
                                     <p class="text-sm text-neutral-500">
-                                        Fill the form below to add new data of category.
+                                        Fill the form below to add new data of product.
                                     </p>
                                 </div>
                                 <div class="p-6 pt-0 space-y-2">
@@ -113,10 +131,54 @@
                                         <label
                                             class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                             for="name">Name</label>
-                                        <input type="text" placeholder="Name of Category" name="name"
+                                        <input type="text" placeholder="Name of Product" name="name"
                                             id="name"
                                             class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md peer border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
                                         @error('name')
+                                            <div class="text-sm text-red-500">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <label
+                                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            for="description">Description</label>
+                                        <textarea x-data="{
+                                            resize() {
+                                                $el.style.height = '0px';
+                                                $el.style.height = $el.scrollHeight + 'px'
+                                            }
+                                        }" x-init="resize()" @input="resize()" type="text"
+                                            placeholder="Description of Product" name="description" id="description"
+                                            class="flex w-full h-auto min-h-[80px] px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"></textarea>
+                                        @error('description')
+                                            <div class="text-sm text-red-500">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <label
+                                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            for="price">Price</label>
+                                        <input type="text" placeholder="Price of Product" name="price"
+                                            id="price"
+                                            class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md peer border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
+                                        @error('price')
+                                            <div class="text-sm text-red-500">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <label
+                                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            for="category_id">Category</label>
+                                        <select name="category_id" id="category_id"
+                                            class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md peer border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50">
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('category_id')
                                             <div class="text-sm text-red-500">{{ $message }}</div>
                                         @enderror
                                     </div>
