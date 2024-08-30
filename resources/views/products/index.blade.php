@@ -90,12 +90,12 @@
                                                             <td
                                                                 class="flex items-center justify-end gap-2 px-5 py-4 text-sm font-medium text-right whitespace-nowrap">
                                                                 <form
-                                                                    action="{{ route('products.destroy', $product->id) }}"
+                                                                    action="{{ route('admin.products.destroy', $product->id) }}"
                                                                     method="POST">
                                                                     @method('DELETE')
                                                                     @csrf
                                                                     <a class="text-blue-600 hover:text-blue-700"
-                                                                        href="{{ route('products.show', $product->id) }}">
+                                                                        href="{{ route('admin.products.show', $product->id) }}">
                                                                         Edit
                                                                     </a>
                                                                     <button type="submit"
@@ -116,7 +116,7 @@
 
                         <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative" x-cloak>
                             <form class="border rounded-lg shadow-sm bg-card text-neutral-900" method="POST"
-                                action="{{ route('products.store') }}">
+                                action="{{ route('admin.products.store') }}">
                                 @csrf
                                 <div class="flex flex-col space-y-1.5 p-6">
                                     <h3 class="text-lg font-semibold leading-none tracking-tight">

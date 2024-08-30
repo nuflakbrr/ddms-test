@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <form class="border rounded-lg shadow-sm bg-card text-neutral-900" method="POST"
-                    action="{{ route('categories.update', $category->id) }}">
+                    action="{{ route('admin.categories.update', $category->id) }}">
                     @method('PATCH')
                     @csrf
                     <div class="flex flex-col space-y-1.5 p-6">

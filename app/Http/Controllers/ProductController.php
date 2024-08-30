@@ -21,6 +21,15 @@ class ProductController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function indexCustomer()
+    {
+        $products = Product::all();
+        return view('products.customer.index', compact('products'));
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreProductRequest $request)
@@ -38,7 +47,7 @@ class ProductController extends Controller
 
         Product::create($request->all());
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully.');
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
     /**
@@ -49,6 +58,15 @@ class ProductController extends Controller
         $product = Product::find($id);
         $categories = Category::all();
         return view('products.show', compact('product', 'categories'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function showCustomer($id)
+    {
+        $product = Product::find($id);
+        return view('products.customer.show', compact('product'));
     }
 
     /**
@@ -70,7 +88,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->update($request->all());
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
@@ -81,6 +99,6 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 }

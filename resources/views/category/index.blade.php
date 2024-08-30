@@ -72,12 +72,12 @@
                                                             <td
                                                                 class="flex items-center justify-end gap-2 px-5 py-4 text-sm font-medium text-right whitespace-nowrap">
                                                                 <form
-                                                                    action="{{ route('categories.destroy', $category->id) }}"
+                                                                    action="{{ route('admin.categories.destroy', $category->id) }}"
                                                                     method="POST">
                                                                     @method('DELETE')
                                                                     @csrf
                                                                     <a class="text-blue-600 hover:text-blue-700"
-                                                                        href="{{ route('categories.show', $category->id) }}">
+                                                                        href="{{ route('admin.categories.show', $category->id) }}">
                                                                         Edit
                                                                     </a>
                                                                     <button type="submit"
@@ -98,7 +98,7 @@
 
                         <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative" x-cloak>
                             <form class="border rounded-lg shadow-sm bg-card text-neutral-900" method="POST"
-                                action="{{ route('categories.store') }}">
+                                action="{{ route('admin.categories.store') }}">
                                 @csrf
                                 <div class="flex flex-col space-y-1.5 p-6">
                                     <h3 class="text-lg font-semibold leading-none tracking-tight">
