@@ -18,6 +18,9 @@ Route::middleware('auth')->group(function () {
     /**
      * Admin Routes
      */
+
+    // Route::middleware('can:isAdmin')->group(function () {});
+
     // Categories
     Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
     Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
