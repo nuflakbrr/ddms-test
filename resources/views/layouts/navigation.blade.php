@@ -44,10 +44,13 @@
                                                 <p class="text-sm font-medium text-gray-900">Total:</p>
                                                 <p class="text-sm font-semibold text-neutral-900" id="totalPrice"></p>
                                             </div>
-                                            <button
-                                                class="inline-flex items-center justify-center w-40 h-10 px-4 py-2 text-sm font-medium text-white transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-neutral-950 hover:bg-neutral-950/90">
-                                                Checkout
-                                            </button>
+                                            <form action="{{ route('customer.products.store') }}" method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="inline-flex items-center justify-center w-40 h-10 px-4 py-2 text-sm font-medium text-white transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-neutral-950 hover:bg-neutral-950/90">
+                                                    Checkout
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -274,6 +277,31 @@
             }, 0);
 
             $('#totalPrice').text('Rp ' + totalPrice.toFixed());
+
+            // Checkout
+            $('form').submit(function(event) {
+                event.preventDefault();
+                var cart = JSON.parse(localStorage.getItem('cart')) || [];
+                var $form = $(this);
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: 'POST',
+                    data: {
+                        _token: $form.find('input[name="_token"]').val(),
+                        cart: cart
+                    },
+                    success: function(response) {
+                        alert('Checkout successful');
+                        localStorage.removeItem('cart');
+                        updateCartDisplay([]);
+                        $('#totalPrice').text('Rp 0');
+                    },
+                    error: function(error) {
+                        alert('Checkout failed. Please try again.');
+                    }
+                });
+            });
         });
     });
 </script>

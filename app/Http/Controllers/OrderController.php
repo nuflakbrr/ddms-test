@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Models\OrderItem;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -29,8 +31,30 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $cartItems = $request->input('cart', []);
+
+        if (empty($cartItems)) {
+            return response()->json(['error' => 'Cart is empty.'], 400);
+        }
+
+        $order = Order::create([
+            'customer_id' => auth()->id(),
+        ]);
+
+        foreach ($cartItems as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
+
+        // Redirect with success message
+        return redirect()->route('customer.orders.index')->with('success', 'Order created successfully.');
     }
+
 
     /**
      * Display the specified resource.

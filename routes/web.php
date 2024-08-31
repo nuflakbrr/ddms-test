@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,9 @@ Route::middleware('auth')->group(function () {
     // Products
     Route::get('/products', [ProductController::class, 'indexCustomer'])->name('customer.products.index');
     Route::get('/products/{product}', [ProductController::class, 'showCustomer'])->name('customer.products.show');
+
+    // Orders
+    Route::post('/products', [OrderController::class, 'store'])->name('customer.products.store');
 
     // Profile Page
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
